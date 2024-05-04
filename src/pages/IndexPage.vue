@@ -7,7 +7,15 @@
         :rows="tasks"
         row-key="name"
         :columns="columns"
-      ></q-table>
+      >
+        <template v-slot:body-cell-title="props">
+          <q-td :props="props">
+            <a :href="`tasks/${props.value.id}`" target="_blank">{{
+              props.value.name
+            }}</a>
+          </q-td>
+        </template>
+      </q-table>
     </div>
     <TableSkeleton v-if="!tasks" />
   </q-page>
@@ -24,7 +32,6 @@ onMounted(() => {
   axios
     .get('http://localhost:3000/api/tasks')
     .then((response) => {
-      console.log(response);
       tasks.value = response?.data || [];
     })
     .catch((error) => {
@@ -42,7 +49,7 @@ const columns: QTableProps['columns'] = [
     required: true,
     label: 'Title',
     align: 'left',
-    field: (row) => row.name,
+    field: (row) => row,
     sortable: true,
   },
   {

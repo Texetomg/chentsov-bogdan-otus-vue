@@ -2,9 +2,12 @@ import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    path: '/signin',
+    component: () => import('src/pages/SignInPage.vue'),
+  },
+  {
+    path: '/signup',
+    component: () => import('src/pages/SignUpPage.vue'),
   },
   {
     path: '/tasks/:id',
@@ -15,6 +18,11 @@ const routes: RouteRecordRaw[] = [
     path: '/user',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/UserPage.vue') }],
+  },
+  {
+    path: '/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
 
   // Always leave this as last one,
