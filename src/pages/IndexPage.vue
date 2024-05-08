@@ -1,47 +1,64 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+    <div class="q-pa-md" v-if="tasks">
+      <q-table
+        dark
+        title="Tasks"
+        :rows="tasks"
+        row-key="name"
+        :columns="columns"
+      >
+        <template v-slot:body-cell-title="props">
+          <q-td :props="props">
+            <a :href="`tasks/${props.value.id}`" target="_blank">{{
+              props.value.name
+            }}</a>
+          </q-td>
+        </template>
+      </q-table>
+    </div>
+    <TableSkeleton v-if="!tasks" />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
+import { QTableProps } from 'quasar';
+import { onMounted, ref } from 'vue';
+import TableSkeleton from 'src/components/skeletons/TableSkeleton.vue';
+import { api } from 'src/boot/axios';
+const tasks = ref<QTableProps['rows']>(null);
+
+onMounted(() => {
+  api
+    .get('tasks')
+    .then((response) => {
+      tasks.value = response?.data || [];
+    })
+    .catch((error) => {
+      console.error('Error fetching users:', error);
+    });
+});
 
 defineOptions({
-  name: 'IndexPage'
+  name: 'IndexPage',
 });
 
-const todos = ref<Todo[]>([
+const columns: QTableProps['columns'] = [
   {
-    id: 1,
-    content: 'ct1'
+    name: 'title',
+    required: true,
+    label: 'Title',
+    align: 'left',
+    field: (row) => row,
+    sortable: true,
   },
   {
-    id: 2,
-    content: 'ct2'
+    name: 'difficulty',
+    required: true,
+    label: 'Difficulty',
+    align: 'left',
+    field: (row) => row.difficulty,
+    sortable: true,
   },
-  {
-    id: 3,
-    content: 'ct3'
-  },
-  {
-    id: 4,
-    content: 'ct4'
-  },
-  {
-    id: 5,
-    content: 'ct5'
-  }
-]);
-
-const meta = ref<Meta>({
-  totalCount: 1200
-});
+];
 </script>
