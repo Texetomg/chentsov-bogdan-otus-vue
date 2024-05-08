@@ -23,14 +23,14 @@
 
 <script setup lang="ts">
 import { QTableProps } from 'quasar';
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import TableSkeleton from 'src/components/skeletons/TableSkeleton.vue';
+import { api } from 'src/boot/axios';
 const tasks = ref<QTableProps['rows']>(null);
 
 onMounted(() => {
-  axios
-    .get('http://localhost:3000/api/tasks')
+  api
+    .get('tasks')
     .then((response) => {
       tasks.value = response?.data || [];
     })

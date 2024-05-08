@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from 'src/stores/auth';
 import { ref } from 'vue';
+import FormErrors from './FormErrors.vue';
 
 const email = ref();
 const password = ref();
@@ -58,6 +59,7 @@ const signin = async () => {
               no-caps
               class="full-width"
               @click="signin"
+              :disable="!email || !password"
             ></q-btn>
           </q-card-section>
           <q-card-section class="text-center q-pt-none">
@@ -71,6 +73,7 @@ const signin = async () => {
               >
             </div>
           </q-card-section>
+          <FormErrors />
         </q-card>
       </q-page>
     </q-page-container>

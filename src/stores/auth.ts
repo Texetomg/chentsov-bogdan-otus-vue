@@ -1,19 +1,22 @@
-import axios from 'axios';
 import { defineStore } from 'pinia';
+import { api } from 'src/boot/axios';
+
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
   const authInfo = ref(null);
   const errors = ref([]);
-
+  const route = useRouter();
   const signin = async (payload: { email: string; password: string }) => {
     errors.value = null;
     try {
-      const res = await axios.post(
-        'http://localhost:3000/api/auth/login',
-        payload
-      );
+      const res = await api.post('auth/login', payload);
       authInfo.value = res.data;
+      if (res.data?.token) {
+        localStorage.setItem('token', res.data.token);
+        route.push('/');
+      }
     } catch (err) {
       errors.value = err.response?.data?.message || [];
     }
@@ -26,8 +29,12 @@ export const useAuthStore = defineStore('auth', () => {
   }) => {
     errors.value = null;
     try {
-      const res = await axios.post('http://localhost:3000/api/users', payload);
+      const res = await api.post('users', payload);
       authInfo.value = res.data;
+      if (res.data?.token) {
+        localStorage.setItem('token', res.data.token);
+        route.push('/');
+      }
     } catch (err) {
       errors.value = err.response?.data?.message || [];
     }

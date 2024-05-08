@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from 'src/stores/auth';
 import { ref } from 'vue';
+import FormErrors from './FormErrors.vue';
 
 const login = ref();
 const email = ref();
@@ -18,7 +19,6 @@ const signup = async () => {
 </script>
 
 <template>
-  {{ console.log(useAuthStore().errors) }}
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
       <q-page class="flex flex-center bg-grey-2">
@@ -64,6 +64,7 @@ const signup = async () => {
               no-caps
               class="full-width"
               @click="signup"
+              :disable="!email || !password || !login"
             ></q-btn>
           </q-card-section>
           <q-card-section class="text-center q-pt-none">
@@ -77,26 +78,7 @@ const signup = async () => {
               >
             </div>
           </q-card-section>
-          <q-card-section class="text-center q-pt-none">
-            <span
-              v-if="
-                useAuthStore().errors?.length &&
-                !Array.isArray(useAuthStore().errors)
-              "
-            >
-              {{ useAuthStore().errors }}
-            </span>
-          </q-card-section>
-          <ul
-            v-if="
-              useAuthStore().errors?.length &&
-              Array.isArray(useAuthStore().errors)
-            "
-          >
-            <li v-for="message in useAuthStore().errors" :key="message">
-              {{ message }}
-            </li>
-          </ul>
+          <FormErrors />
         </q-card>
       </q-page>
     </q-page-container>
