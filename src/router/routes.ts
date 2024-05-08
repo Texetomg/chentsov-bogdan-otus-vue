@@ -3,6 +3,8 @@ import { RouteRecordRaw } from 'vue-router';
 
 const authGuard = (to, from, next) => {
   if (localStorage.getItem('token')) {
+    api.defaults.headers.common['Authorization'] =
+      'Bearer ' + localStorage.getItem('token');
     api.get('auth/profile').then((res) => {
       if (res.data?.email) {
         next();
