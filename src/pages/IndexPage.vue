@@ -2,7 +2,7 @@
   <q-page class="row items-center justify-evenly">
     <div class="q-pa-md" v-if="tasks">
       <q-table
-        dark
+        class="text-grey-9"
         title="Tasks"
         :rows="tasks"
         row-key="name"
@@ -10,9 +10,7 @@
       >
         <template v-slot:body-cell-title="props">
           <q-td :props="props">
-            <a :href="`tasks/${props.value.id}`" target="_blank">{{
-              props.value.name
-            }}</a>
+            <a :href="`tasks/${props.value.id}`">{{ props.value.name }}</a>
           </q-td>
         </template>
       </q-table>
