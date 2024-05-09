@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from 'src/stores/auth';
-
+const store = useAuthStore();
+const { authInfo } = store;
 defineOptions({
   name: 'MainLayout',
 });
@@ -12,8 +13,14 @@ defineOptions({
       <q-toolbar class="bg-white text-grey-9 shadow-1">
         <q-btn stretch flat label="Home" to="/"></q-btn>
         <q-toolbar-title />
-        <q-btn icon="person" stretch flat>
-          <q-menu :offset="[20, 0]">
+
+        <q-btn stretch flat>
+          <q-avatar size="42px">
+            <img
+              :src="`https://avatar.iran.liara.run/username?username=${authInfo?.login}`"
+            />
+          </q-avatar>
+          <q-menu :offset="[5, 0]">
             <q-list>
               <q-item clickable v-close-popup to="/user">
                 <q-item-section>

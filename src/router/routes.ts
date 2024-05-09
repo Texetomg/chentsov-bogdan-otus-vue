@@ -1,12 +1,17 @@
 import { api } from 'src/boot/axios';
+import { useAuthStore } from 'src/stores/auth';
 import { RouteRecordRaw } from 'vue-router';
 
 const authGuard = (to, from, next) => {
+  const store = useAuthStore();
   if (localStorage.getItem('token')) {
     api.defaults.headers.common['Authorization'] =
       'Bearer ' + localStorage.getItem('token');
     api.get('auth/profile').then((res) => {
       if (res.data?.email) {
+        store.$patch({
+          authInfo: res.data,
+        });
         next();
       } else {
         next('/signin');
