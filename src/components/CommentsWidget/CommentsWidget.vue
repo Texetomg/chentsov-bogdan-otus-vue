@@ -33,6 +33,7 @@ import { api } from 'src/boot/axios';
 import { useAuthStore } from 'src/stores/auth';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import _ from 'lodash';
 
 const route = useRoute();
 const routeId = route.params.id;
@@ -41,22 +42,20 @@ const comments = ref(null);
 const store = useAuthStore();
 const { authInfo } = store;
 const newMsg = ref(null);
+
 const sendMessage = () => {
   const newComment = {
-    task: routeId,
-    user: authInfo.id,
     value: newMsg.value,
-    rating: 0,
   };
 
-  api.post('comments', newComment);
+  api.post(`comments/${routeId}`, newComment).then(() => fetchComments());
 };
 
-onMounted(() => {
+const fetchComments = () => {
   api
     .get(`comments/${routeId}`)
     .then((response) => {
-      comments.value = response?.data || [];
+      comments.value = _.sortBy(response?.data, 'createdAt') || [];
     })
     .catch((error) => {
       $q.notify({
@@ -65,5 +64,9 @@ onMounted(() => {
       });
       console.error('Error fetching discussion:', error);
     });
+};
+
+onMounted(() => {
+  fetchComments();
 });
 </script>
