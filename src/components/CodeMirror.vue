@@ -2,7 +2,10 @@
   <codemirror
     v-model="code"
     placeholder="Code goes here..."
-    :style="{ height: 'calc(100vh - 100px)' }"
+    :style="{
+      height: `calc(100vh / 100 * ${height} - 200px)`,
+      minHeight: '100px',
+    }"
     :autofocus="true"
     :indent-with-tab="true"
     :tab-size="2"
@@ -17,6 +20,7 @@ import { Codemirror } from 'vue-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 
 export default defineComponent({
+  props: ['height'],
   components: {
     Codemirror,
   },
