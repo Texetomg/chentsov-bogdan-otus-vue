@@ -38,10 +38,12 @@ import _ from 'lodash';
 const route = useRoute();
 const routeId = route.params.id;
 const $q = useQuasar();
+
 const comments = ref(null);
+const newMsg = ref(null);
+
 const store = useAuthStore();
 const { authInfo } = store;
-const newMsg = ref(null);
 
 const sendMessage = () => {
   const newComment = {

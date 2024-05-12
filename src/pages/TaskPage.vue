@@ -13,24 +13,7 @@
             class="column justify-between no-wrap"
             style="height: calc(100vh - 102px)"
           >
-            <div class="q-pa-md">
-              <div v-if="task?.name" class="text-h4 q-mb-md">
-                {{ task.name }}
-              </div>
-              <div v-if="task?.description" class="q-my-md">
-                {{ task.description }}
-              </div>
-              <div v-if="task?.examples" class="q-my-md">
-                <div v-for="example in task.examples" :key="example">
-                  {{ example }}
-                </div>
-              </div>
-              <div v-if="task?.constraints" class="q-my-md">
-                <div v-for="constraint in task.constraints" :key="constraint">
-                  {{ constraint }}
-                </div>
-              </div>
-            </div>
+            <TaskDescription />
             <q-list bordered class="rounded-borders">
               <q-expansion-item icon="chat_bubble_outline" label="Discussion">
                 <CommentsWidget />
@@ -47,16 +30,7 @@
             class="q-ma-md column justify-between no-wrap"
             style="height: calc(100% - 32px); min-height: 200px"
           >
-            <div class="q-mx-md q-py-md">
-              <CodeMirror :height="hSplitterModel" />
-            </div>
-            <div class="q-ma-md">
-              <q-btn
-                color="secondary"
-                label="Solution"
-                class="float-right"
-              ></q-btn>
-            </div>
+            <SolutionWidget :hSplitterModel="hSplitterModel" />
           </q-card>
         </template>
       </q-splitter>
@@ -65,31 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
-import { api } from 'src/boot/axios';
-import CodeMirror from 'src/components/CodeMirror.vue';
-import CommentsWidget from 'src/components/CommentsWidget/CommentsWidget.vue';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import CommentsWidget from 'src/components/taskPageComponets/CommentsWidget.vue';
+import SolutionWidget from 'src/components/taskPageComponets/SolutionWidget.vue';
+import TaskDescription from 'src/components/taskPageComponets/TaskDescription.vue';
+import { ref } from 'vue';
 const vSplitterModel = ref(50);
 const hSplitterModel = ref(50);
-const task = ref(null);
-const route = useRoute();
-const $q = useQuasar();
-
-onMounted(() => {
-  const routeId = route.params.id;
-  api
-    .get(`tasks/${routeId}`)
-    .then((response) => {
-      task.value = response?.data || [];
-    })
-    .catch((error) => {
-      $q.notify({
-        message: 'Error',
-        color: 'negative',
-      });
-      console.error('Error fetching task:', error);
-    });
-});
 </script>
