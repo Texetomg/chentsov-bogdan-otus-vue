@@ -1,6 +1,6 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <div class="q-pa-md" v-if="tasks">
+    <div class="q-pa-md" v-if="tasks" style="width: 500px">
       <q-table
         class="text-grey-9"
         title="Tasks"
@@ -49,6 +49,15 @@ const columns: QTableProps['columns'] = [
     align: 'left',
     field: (row) => row,
     sortable: true,
+    sort: (a, b) => {
+      if (a.name < b.name) {
+        return 1;
+      }
+      if (a.name > b.name) {
+        return -1;
+      }
+      return 0;
+    },
   },
   {
     name: 'difficulty',

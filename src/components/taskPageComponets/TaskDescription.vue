@@ -3,18 +3,34 @@
     <div v-if="task?.name" class="text-h4 q-mb-md">
       {{ task.name }}
     </div>
-    <div v-if="task?.description" class="q-my-md">
+    <q-badge>{{ task?.difficulty }}</q-badge>
+    <div v-if="task?.description" class="q-my-sm">
       {{ task.description }}
     </div>
-    <div v-if="task?.examples" class="q-my-md">
-      <div v-for="example in task.examples" :key="example">
-        {{ example }}
+    <div v-if="task?.examples" class="q-my-sm">
+      <div
+        v-for="(example, idx) in task.examples"
+        :key="example"
+        class="q-py-sm"
+      >
+        <div>Example {{ idx + 1 }}:</div>
+        <div class="q-mx-sm">
+          <div>Input: {{ example.input }}</div>
+          <div>Output: {{ example.output }}</div>
+        </div>
       </div>
     </div>
-    <div v-if="task?.constraints" class="q-my-md">
-      <div v-for="constraint in task.constraints" :key="constraint">
-        {{ constraint }}
-      </div>
+    <div v-if="task?.constraints" class="q-my-sm">
+      <div>Constraints:</div>
+      <ul class="q-px-md">
+        <li
+          v-for="constraint in task.constraints"
+          :key="constraint"
+          class="q-pb-sm"
+        >
+          {{ constraint }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
